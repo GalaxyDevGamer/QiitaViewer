@@ -6,6 +6,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
+import android.support.v4.content.FileProvider
 import android.widget.Toast
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -21,26 +23,26 @@ import javax.xml.parsers.DocumentBuilderFactory
 /**
  * Created by galaxy on 2018/03/16.
  */
-class Updater {
-    private var context: Context? = null
+class Updater(context: Context, url: String) {
+    private var context: Context = context
     private lateinit var currentVersionNme: String
     private var currentVersionCode: Int = 0
     private lateinit var updateEventListener: UpdateEventListener
     private lateinit var updateCheckUrl: String
     private var tempApkFile: File? = null
-    private var updateApkFileUrl: String? = null
+    private var updateApkFileUrl: String = url
     private var latestVersionName: String? = null
     private var latestVersionCode: Int = 0
     private var updateDescription: String? = null
     private var updateMessage: String? = null
 
-    fun Updater(context: Context) {
+    fun Updater(context: Context, url: String) {
         this.context = context
 //        updateCheckUrl = context.getString(R.string.update_url)
         getCurrentVersion()
     }
 
-    fun setListener(updateEventListener: UpdateEventListener){
+    fun setListener(updateEventListener: UpdateEventListener) {
         this.updateEventListener = updateEventListener
     }
 
@@ -56,6 +58,7 @@ class Updater {
 
     inner class UpdateCheckTask : AsyncTask<String, String, String>() {
         override fun doInBackground(vararg params: String): String? {
+            getCurrentVersion()
             getLatestVersion()
             if (currentVersionCode < latestVersionCode)
                 return updateMessage
@@ -68,7 +71,7 @@ class Updater {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-//            updateEventListener.onCheckFinished(result)
+            updateEventListener.onCheckFinished(result)
             Toast.makeText(context, updateMessage, Toast.LENGTH_LONG).show();
         }
     }
@@ -84,10 +87,10 @@ class Updater {
     fun getLatestVersion() {
         try {
             val map = parseXml("")
-            latestVersionCode = Integer.parseInt(map.get("versionCode"))
-            latestVersionName = map.get("versionName")
-            updateDescription = map.get("description")
-            updateApkFileUrl = map.get("url")
+            latestVersionCode = Integer.parseInt(map["versionCode"])
+            latestVersionName = map["versionName"]
+            updateDescription = map["description"]
+            updateApkFileUrl = map["url"]!!
         } catch (e: Exception) {
             updateMessage = "Failed to check update"
         }
@@ -104,7 +107,7 @@ class Updater {
             var i = 0
             do {
                 val node = nodeList.item(i)
-                if (node.nodeType == Element.ELEMENT_NODE){
+                if (node.nodeType == Element.ELEMENT_NODE) {
                     val element = node as Element
                     map.put(element.tagName, element.textContent.trim())
                 }
@@ -130,38 +133,27 @@ class Updater {
         DownloadApkTask().execute()
     }
 
-    inner class DownloadApkTask : AsyncTask<Void, Void, Void>() {
-        override fun doInBackground(vararg params: Void): Void? {
-            try {
-                tempApkFile = File.createTempFile("apk", ".apk", context?.externalCacheDir)
-                uriToFile(updateApkFileUrl, tempApkFile)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            return null
+    inner class DownloadApkTask : AsyncTask<Void, Void, Boolean>() {
+        override fun doInBackground(vararg params: Void): Boolean? {
+            tempApkFile = File.createTempFile("apk", ".apk", context.externalCacheDir)
+            return uriToFile(updateApkFileUrl, tempApkFile)
         }
 
-        override fun onPostExecute(result: Void) {
+        override fun onPostExecute(result: Boolean) {
             super.onPostExecute(result)
-            if (tempApkFile == null) {
-                updateEventListener.onDownloadApkFailed()
-            } else {
+            if (result) {
                 updateEventListener.onDownloadApkComplete()
+            } else {
+                updateEventListener.onDownloadApkFailed()
             }
         }
     }
 
-    fun uriToFile(url: String?, file: File?): String? {
-        try {
-            urlToOutputStream(url, FileOutputStream(file))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
-        }
-        return file?.absolutePath
+    fun uriToFile(url: String?, file: File?): Boolean {
+        return urlToOutputStream(url, FileOutputStream(file))
     }
 
-    private fun urlToOutputStream(url: String?, outputStream: FileOutputStream) {
+    private fun urlToOutputStream(url: String?, outputStream: FileOutputStream):Boolean {
         try {
             val urlConnection = URL(url).openConnection()
             urlConnection.getRequestProperty("GET")
@@ -169,34 +161,42 @@ class Updater {
             urlConnection.connect()
 
             val inputStream = urlConnection.getInputStream()
-//            val buffer = Byte[1024]
-            val bufferLength = 0
+            val buffer = ByteArray(1024)
+            var bufferLength = 0
 
-//            while ((bufferLength = is.readLine(buffer)) > 0) {
-//                outputStream.write(buffer, 0, bufferLength)
-//            }
+            while ({ bufferLength = inputStream.read(buffer); bufferLength }() > 0) {
+                outputStream.write(buffer, 0, bufferLength)
+            }
             outputStream.close()
             inputStream.close()
+            return true
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        return false
     }
 
     fun installApk() {
-        if (tempApkFile == null)
-            return
-
-        context?.startActivity(Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(Uri.fromFile(tempApkFile), "appliation/vnd.android.package-archive")
-            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK and Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        })
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //Android 7.0以降の端末ではこう書かないと落ちる
+            context.startActivity(Intent(Intent.ACTION_INSTALL_PACKAGE).apply {
+                data = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+".provider", tempApkFile!!)
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            })
+        } else {
+            //逆に6.0以下ではこのままじゃないと動かない
+            context.startActivity(Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(Uri.fromFile(tempApkFile), "appliation/vnd.android.package-archive")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            })
+        }
     }
 
     fun deleteTempApkFile() {
-//        for (file in context?.externalCacheDir.listFiles()) {
-//            if (file.name.endsWith(".apk"))
-//                file.delete()
-//        }
+        for (file in context.externalCacheDir.listFiles()) {
+            if (file.name.endsWith(".apk"))
+                file.delete()
+        }
     }
 
     interface UpdateEventListener {

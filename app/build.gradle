@@ -35,9 +35,9 @@ dependencies {
     implementation "com.android.support:design:$android_appcompat_version"
     implementation "com.squareup.retrofit2:retrofit:$android_retrofit2_version"
     implementation "com.squareup.retrofit2:converter-gson:$android_retrofit2_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile "com.squareup.picasso:picasso:$android_picasso_version"
-    compile "de.greenrobot:eventbus:$android_eventbus_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.squareup.picasso:picasso:$android_picasso_version"
+    implementation "org.greenrobot:eventbus:$android_eventbus_version"
 }
 repositories {
     mavenCentral()
