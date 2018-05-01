@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.2.31'
+    ext.kotlin_version = '1.2.40'
     ext.realm_version = "5.0.0"
     ext.deploygate_version = "1.1.5"
 
@@ -10,7 +10,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "io.realm:realm-gradle-plugin:$realm_version"
         classpath "com.deploygate:gradle:$deploygate_version"
@@ -25,8 +25,8 @@ allprojects {
         jcenter()
     }
     ext{
-        android_appcompat_version = "27.1.0"
-        android_constraint_version = "1.0.2"
+        android_appcompat_version = "27.1.1"
+        android_constraint_version = "1.1.0"
         android_retrofit2_version = "2.3.0"
         android_picasso_version = "2.5.2"
         android_eventbus_version = "3.0.0"
