@@ -2,111 +2,68 @@ package galaxy.qiitaviewer.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.squareup.picasso.Picasso
 import galaxy.qiitaviewer.R
 import galaxy.qiitaviewer.callback.RecyclerListener
-import galaxy.qiitaviewer.data.Info
-import galaxy.qiitaviewer.data.User
-import galaxy.qiitaviewer.realm.Article
+import galaxy.qiitaviewer.data.Article
+import galaxy.qiitaviewer.helper.ArticleManager
+import galaxy.qiitaviewer.realm.Favourite
 import io.realm.Realm
 import io.realm.RealmResults
-import java.util.*
+import kotlinx.android.synthetic.main.article_cell.view.*
 
 /**
  * Created by galaxy on 2018/03/19.
  */
-class RecyclerAdapter(val context: Context?, listener: RecyclerListener) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+class ArticleAdapter(val context: Context?, private val listener: RecyclerListener) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
-    private var clickListener: RecyclerListener = listener
-    private var list: LinkedList<Info> = LinkedList()
+    var list = ArticleManager.instance.artist
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_item, parent, false)
-        Log.d("Adapter", "onCreate")
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.article_cell, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItems(list[position])
-        holder.itemView.setOnClickListener({ clickListener.onClick(position) })
-        Log.d("Adapter", "onBindView")
+        holder.itemView.setOnClickListener { listener.onClick(list[position]) }
     }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
+    override fun getItemCount() = list.size
 
-    fun add(info: Info) {
-        list.add(0, info)
-        notifyItemInserted(0)
-    }
-
-    fun addArticle(info: Info) {
-        list.add(0, info)
+    fun addArticle(article: Article) {
+        list.add(0, article)
         when (itemCount) {
             0 -> {
-                list.add(info)
+                list.add(article)
                 notifyItemInserted(0)
             }
             1 -> {
-                list.add(1, info)
+                list.add(1, article)
                 notifyItemInserted(1)
             }
             else -> {
-                list.add(itemCount - 1, info)
+                list.add(itemCount - 1, article)
                 notifyItemInserted(itemCount - 1)
             }
         }
     }
 
-    fun addList(info: List<Info>) {
-        list.addAll(info)
-        notifyDataSetChanged()
-    }
-
-    fun update(info: Info) {
-        if (list.contains(info))
+    fun update(article: Article) {
+        if (list.contains(article))
             return
-        list.add(0, info)
+        list.add(0, article)
         notifyItemInserted(0)
     }
 
-    fun remove(info: Info, position: Int) {
-        if (list.contains(info))
+    fun remove(article: Article, position: Int) {
+        if (list.contains(article))
             return
-        list.remove(info)
+        list.remove(article)
         notifyItemRemoved((itemCount - 1) - position)
-    }
-
-    fun clear() {
-        list.clear()
-//        notifyDataSetChanged()
-    }
-
-    fun getId(position: Int): String {
-        return list[position].id
-    }
-
-    fun getTitle(position: Int): String {
-        return list[position].title
-    }
-
-    fun getUrl(position: Int): String {
-        return list[position].url
-    }
-
-    fun getBody(position: Int): String {
-        return list[position].body
-    }
-
-    fun getImage(position: Int): String {
-        return list[position].user.profile_image_url
     }
 
     /**
@@ -115,7 +72,7 @@ class RecyclerAdapter(val context: Context?, listener: RecyclerListener) : Recyc
      */
     fun refresh(realm: Realm) {
         realm.beginTransaction()
-        val result: RealmResults<Article> = realm.where(Article::class.java).findAllAsync()
+        val result: RealmResults<Favourite> = realm.where(Favourite::class.java).findAllAsync()
         result.load()
         val articleInfo = realm.copyFromRealm(result)
         val cnt = 0
@@ -138,11 +95,11 @@ class RecyclerAdapter(val context: Context?, listener: RecyclerListener) : Recyc
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindItems(item: Info) {
-            val itemTitle = itemView.findViewById(R.id.item_title) as TextView
-            val itemImage = itemView.findViewById(R.id.item_image) as ImageView
-            itemTitle.text = item.title
-            Picasso.with(context).load(item.user.profile_image_url).into(itemImage)
+        fun bindItems(item: Article) {
+            val thumbnail = itemView.article_thumbnail
+            val title = itemView.article_title
+            title.text = item.title
+            Picasso.with(context).load(item.user.profile_image_url).into(thumbnail)
         }
     }
 }

@@ -3,7 +3,7 @@ package galaxy.qiitaviewer.data
 /**
  * Created by galaxy on 2018/03/19.
  */
-data class Info (
+data class Article (
     val id: String,
     val title: String,
     val body: String,
