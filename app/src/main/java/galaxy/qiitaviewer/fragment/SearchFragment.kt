@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import galaxy.qiitaviewer.ArticleData
 import galaxy.qiitaviewer.ContextData
 import galaxy.qiitaviewer.R
 import galaxy.qiitaviewer.adapter.SearchAdapter
@@ -14,14 +13,12 @@ import galaxy.qiitaviewer.callback.OnRequestComplete
 import galaxy.qiitaviewer.callback.QiitaClient
 import galaxy.qiitaviewer.callback.RecyclerListener
 import galaxy.qiitaviewer.data.Article
-import galaxy.qiitaviewer.type.FragmentType
-import galaxy.qiitaviewer.type.NavigationType
 import kotlinx.android.synthetic.main.fragment_recyclerview.*
 
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
- * [SearchFragment.OnListFragmentInteractionListener] interface.
+ * [RecyclerListener] interface.
  */
 class SearchFragment : android.support.v4.app.Fragment(), RecyclerListener, OnRequestComplete {
 

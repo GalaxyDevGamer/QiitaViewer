@@ -88,9 +88,9 @@ class WebViewFragment : android.support.v4.app.Fragment() {
         private const val ARG = "index"
 
         @JvmStatic
-        fun newInstance(arg: Serializable) = WebViewFragment().apply {
+        fun newInstance(arg: Any) = WebViewFragment().apply {
             arguments = Bundle().apply {
-                putSerializable(ARG, arg)
+                putSerializable(ARG, arg as Serializable)
             }
         }
     }

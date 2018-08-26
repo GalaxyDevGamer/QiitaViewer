@@ -37,10 +37,6 @@ interface QiitaClient {
         val api = retrofit.create(QiitaClient::class.java)
 
         fun create(): QiitaClient {
-//            val retrofit = retrofit2.Retrofit.Builder().apply {
-//                baseUrl("https://qiita.com/")
-//                addConverterFactory(GsonConverterFactory.create())
-//            }.build()
             val retrofit = retrofit2.Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
                             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -61,7 +57,6 @@ interface QiitaClient {
         fun getArticle(page: Int, listener: OnRequestComplete) {
             api.getArticles(page, 10).enqueue(object : Callback<List<Article>> {
                 override fun onResponse(call: Call<List<Article>>?, response: Response<List<Article>>?) {
-                    Log.e("count", response?.body()?.count().toString())
                     listener.onComplete(response?.body()!!)
                 }
 
