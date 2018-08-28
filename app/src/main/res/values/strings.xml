@@ -10,4 +10,8 @@
     <string name="favourite">Favourite</string>
     <string name="stock">Stock</string>
     <string name="thumbnail">Thumbnail</string>
+    <string name="good">Good</string>
+    <string name="user">User</string>
+    <string name="login">LogIn</string>
+    <string name="logout">Logout</string>
 </resources>

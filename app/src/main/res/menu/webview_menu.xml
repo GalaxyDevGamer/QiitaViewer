@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/good"
+        android:title="@string/good"
+        android:icon="@mipmap/baseline_thumb_up_black_24"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/favourite"
         android:title="@string/favourite"
         android:icon="@mipmap/ic_star_border_black_24dp"

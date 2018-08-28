@@ -1,9 +1,9 @@
 package galaxy.qiitaviewer.helper
 
-import galaxy.qiitaviewer.fragment.ArticleFragment
-import galaxy.qiitaviewer.fragment.HomeFragment
-import galaxy.qiitaviewer.fragment.SearchFragment
-import galaxy.qiitaviewer.fragment.WebViewFragment
+import galaxy.qiitaviewer.presentation.fragment.ArticleFragment
+import galaxy.qiitaviewer.presentation.fragment.HomeFragment
+import galaxy.qiitaviewer.presentation.fragment.SearchFragment
+import galaxy.qiitaviewer.presentation.fragment.WebViewFragment
 import galaxy.qiitaviewer.type.FragmentType
 
 class FragmentMakeHelper {

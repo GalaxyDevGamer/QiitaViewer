@@ -1,7 +1,7 @@
 package galaxy.qiitaviewer.realm
 
-import galaxy.qiitaviewer.data.Article
-import galaxy.qiitaviewer.data.User
+import galaxy.qiitaviewer.domain.entity.Article
+import galaxy.qiitaviewer.domain.entity.User
 import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

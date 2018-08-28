@@ -3,13 +3,10 @@ package galaxy.qiitaviewer.callback
 import android.util.Log
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import galaxy.qiitaviewer.data.Article
-import galaxy.qiitaviewer.helper.ArticleManager
-import kotlinx.android.synthetic.main.fragment_recyclerview.*
+import galaxy.qiitaviewer.domain.entity.Article
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -30,12 +27,6 @@ interface QiitaClient {
     fun getStocks(@Query("page") page: Int): Call<List<Article>>
 
     companion object {
-        private var retrofit = retrofit2.Retrofit.Builder().addConverterFactory(GsonConverterFactory.create(GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create())).baseUrl("https://qiita.com/").build()
-
-        val api = retrofit.create(QiitaClient::class.java)
-
         fun create(): QiitaClient {
             val retrofit = retrofit2.Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
@@ -45,19 +36,10 @@ interface QiitaClient {
             return retrofit.create(QiitaClient::class.java)
         }
 
-        fun Encode(query: String?) = try {
-            // url encode
-            val encode_query = URLEncoder.encode(query, "UTF-8")
-            encode_query
-        } catch (e: UnsupportedEncodingException) {
-            Log.e("", e.toString(), e)
-            null
-        }
-
-        fun getArticle(page: Int, listener: OnRequestComplete) {
-            api.getArticles(page, 10).enqueue(object : Callback<List<Article>> {
+        fun getArticle(page: Int) {
+            create().getArticles(page, 10).enqueue(object : Callback<List<Article>> {
                 override fun onResponse(call: Call<List<Article>>?, response: Response<List<Article>>?) {
-                    listener.onComplete(response?.body()!!)
+//                    listener.onComplete(response?.body()!!)
                 }
 
                 override fun onFailure(call: Call<List<Article>>?, t: Throwable?) {
@@ -65,10 +47,10 @@ interface QiitaClient {
             })
         }
 
-        fun search(query: String?, page: Int, listener: OnRequestComplete) {
-            api.searchArticles(query, page, 10).enqueue(object : Callback<List<Article>> {
+        fun search(query: String?, page: Int) {
+            create().searchArticles(query, page, 10).enqueue(object : Callback<List<Article>> {
                 override fun onResponse(call: Call<List<Article>>?, response: Response<List<Article>>?) {
-                    listener.onComplete(response?.body()!!)
+//                    listener.onComplete(response?.body()!!)
                 }
 
                 override fun onFailure(call: Call<List<Article>>?, t: Throwable?) {
@@ -76,10 +58,10 @@ interface QiitaClient {
             })
         }
 
-        fun getStock(page: Int, listener: OnRequestComplete) {
-            api.getStocks(page).enqueue(object : Callback<List<Article>> {
+        fun getStock(page: Int) {
+            create().getStocks(page).enqueue(object : Callback<List<Article>> {
                 override fun onResponse(call: Call<List<Article>>, response: Response<List<Article>>) {
-                    listener.onComplete(response.body()!!)
+//                    listener.onComplete(response.body()!!)
                 }
 
                 override fun onFailure(call: Call<List<Article>>, t: Throwable) {

@@ -30,15 +30,26 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$support_library"
     implementation "com.android.support:support-v4:$support_library"
     implementation "com.android.support:design:$support_library"
+    implementation "com.android.support:recyclerview-v7:$support_library"
     implementation "com.squareup.retrofit2:retrofit:$android_retrofit2_version"
     implementation "com.squareup.retrofit2:converter-gson:$android_retrofit2_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.squareup.picasso:picasso:$android_picasso_version"
     implementation "org.greenrobot:eventbus:$android_eventbus_version"
-    implementation 'com.android.support:recyclerview-v7:28.0.0-rc01'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // DI
+    def dagger_version = '2.15'
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0'
 }
 repositories {
     mavenCentral()
