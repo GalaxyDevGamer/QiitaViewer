@@ -68,6 +68,7 @@ class WebViewFragment : android.support.v4.app.Fragment() {
         super.onPrepareOptionsMenu(menu)
         menu?.findItem(R.id.favourite)?.icon = presenter.getDrawable(context!!)
         menu?.findItem(R.id.stock)?.icon = presenter.stockImage(context!!)
+        menu?.findItem(R.id.like)?.icon = presenter.likeImage(context!!)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

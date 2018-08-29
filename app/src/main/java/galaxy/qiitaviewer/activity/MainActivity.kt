@@ -66,15 +66,9 @@ class MainActivity : AppCompatActivity() {
         updateToolbar()
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.e("activity", "onresume")
-    }
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Log.e("activity", "onnewintent")
         if (intent?.action == Intent.ACTION_VIEW) {
-            Log.e("intent", "action view")
             val code = intent.data?.getQueryParameter("code")
             if (code != null) {
                 launch(UI) {

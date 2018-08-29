@@ -43,6 +43,8 @@ class WebViewPresenter @Inject constructor(private val  useCase: ArticleUseCase)
 
     fun stockImage(context: Context) = if (isStocked) ContextCompat.getDrawable(context, R.mipmap.baseline_folder_black_24) else ContextCompat.getDrawable(context, R.mipmap.baseline_folder_open_black_24)
 
+    fun likeImage(context: Context) = if (isLiked) ContextCompat.getDrawable(context, R.mipmap.baseline_thumb_up_black_24) else ContextCompat.getDrawable(context, R.mipmap.baseline_thumb_up_white_24)
+
     fun deleteFavourite() = Realm.getDefaultInstance().executeTransaction { Realm.getDefaultInstance().where(Favourite::class.java).equalTo("id", id).findFirst()?.deleteFromRealm() }
 
     fun addToFavourite(article: Article) {
@@ -69,7 +71,7 @@ class WebViewPresenter @Inject constructor(private val  useCase: ArticleUseCase)
         val response = if (isLiked) useCase.unlikeThisArticle(id!!) else useCase.likeThisArticle(id!!)
         if (response.isSuccessful) {
             isLiked = !isLiked
-            view?.showMessage(if (isStocked) "Liked" else "unLiked")
+            view?.showMessage(if (isLiked) "Liked" else "unLiked")
             view?.activity?.invalidateOptionsMenu()
         } else
             view?.showMessage("Operation failed")
