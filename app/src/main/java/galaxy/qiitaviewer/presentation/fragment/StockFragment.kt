@@ -13,6 +13,7 @@ import galaxy.qiitaviewer.presentation.adapter.StockAdapter
 import galaxy.qiitaviewer.callback.RecyclerListener
 import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.helper.ArticleManager
+import galaxy.qiitaviewer.helper.PreferenceHelper
 import galaxy.qiitaviewer.presentation.presenter.StockPresenter
 import galaxy.qiitaviewer.presentation.view.StockView
 import kotlinx.android.synthetic.main.fragment_recyclerview.*

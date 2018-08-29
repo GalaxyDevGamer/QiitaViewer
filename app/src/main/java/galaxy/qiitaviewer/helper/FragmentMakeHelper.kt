@@ -1,9 +1,6 @@
 package galaxy.qiitaviewer.helper
 
-import galaxy.qiitaviewer.presentation.fragment.ArticleFragment
-import galaxy.qiitaviewer.presentation.fragment.HomeFragment
-import galaxy.qiitaviewer.presentation.fragment.SearchFragment
-import galaxy.qiitaviewer.presentation.fragment.WebViewFragment
+import galaxy.qiitaviewer.presentation.fragment.*
 import galaxy.qiitaviewer.type.FragmentType
 
 class FragmentMakeHelper {
@@ -13,6 +10,7 @@ class FragmentMakeHelper {
             FragmentType.ARTICLE -> ArticleFragment.newInstance()
             FragmentType.SEARCH -> SearchFragment.newInstance()
             FragmentType.BROWSER -> WebViewFragment.newInstance(any)
+            FragmentType.USERINFO -> UserInfoFragment.newInstance()
         }
     }
 }

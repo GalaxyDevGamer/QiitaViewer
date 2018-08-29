@@ -5,6 +5,7 @@ import galaxy.qiitaviewer.ContextData
 import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.domain.usecase.ArticleUseCase
 import galaxy.qiitaviewer.helper.ArticleManager
+import galaxy.qiitaviewer.helper.PreferenceHelper
 import galaxy.qiitaviewer.presentation.fragment.StockFragment
 import galaxy.qiitaviewer.presentation.view.StockView
 import kotlinx.coroutines.experimental.android.UI
@@ -17,9 +18,11 @@ class StockPresenter @Inject constructor(private val useCase: ArticleUseCase) {
     var currentPage = 1
 
     fun initialize() = launch(UI) {
-        ArticleManager.instance.stock.clear()
-        currentPage = 1
-        getStocks(currentPage)
+        if (PreferenceHelper.instance.getUser() != null) {
+            ArticleManager.instance.stock.clear()
+            currentPage = 1
+            getStocks(currentPage)
+        }
     }
 
     fun loadMore() = launch(UI) {

@@ -3,13 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/good"
-        android:title="@string/good"
+        android:id="@+id/like"
         android:icon="@mipmap/baseline_thumb_up_black_24"
+        android:title="@string/like"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/stock"
+        android:icon="@mipmap/baseline_folder_open_black_24"
+        android:title="@string/stock"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/favourite"
-        android:title="@string/favourite"
         android:icon="@mipmap/ic_star_border_black_24dp"
-        app:showAsAction="always"/>
+        android:title="@string/favourite"
+        app:showAsAction="always" />
 </menu>

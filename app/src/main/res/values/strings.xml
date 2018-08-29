@@ -10,8 +10,11 @@
     <string name="favourite">Favourite</string>
     <string name="stock">Stock</string>
     <string name="thumbnail">Thumbnail</string>
-    <string name="good">Good</string>
+    <string name="like">Like</string>
     <string name="user">User</string>
     <string name="login">LogIn</string>
     <string name="logout">Logout</string>
+    <string name="update">Update</string>
+    <string name="nothing_to_show">Nothing to show!!</string>
+    <string name="have_to_login">You have to login to Qiita</string>
 </resources>
