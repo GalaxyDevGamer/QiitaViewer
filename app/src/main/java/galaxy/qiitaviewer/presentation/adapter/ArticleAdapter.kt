@@ -99,7 +99,7 @@ class ArticleAdapter(val context: Context?, private val listener: RecyclerListen
             val thumbnail = itemView.article_thumbnail
             val title = itemView.article_title
             title.text = item.title
-            Picasso.with(context).load(item.user.profile_image_url).into(thumbnail)
+            Picasso.with(context).load(item.user?.profile_image_url).into(thumbnail)
         }
     }
 }

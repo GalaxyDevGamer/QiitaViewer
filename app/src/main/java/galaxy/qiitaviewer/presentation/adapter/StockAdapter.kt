@@ -29,7 +29,7 @@ class StockAdapter(val context: Context, private val listener: RecyclerListener)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
-        Picasso.with(context).load(item.user.profile_image_url).into(holder.thumbnail)
+        Picasso.with(context).load(item.user?.profile_image_url).into(holder.thumbnail)
         holder.title.text = item.title
         holder.itemView.setOnClickListener {
             listener.onClick(item)

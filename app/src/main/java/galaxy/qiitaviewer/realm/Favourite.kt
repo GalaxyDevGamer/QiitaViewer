@@ -1,7 +1,6 @@
 package galaxy.qiitaviewer.realm
 
 import galaxy.qiitaviewer.domain.entity.Article
-import galaxy.qiitaviewer.domain.entity.User
 import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -22,7 +21,13 @@ open class Favourite : RealmObject() {
         fun getFavourites(): LinkedList<Article> = Realm.getDefaultInstance().use {
             val list: LinkedList<Article> = LinkedList()
             it.where(Favourite::class.java).findAll().forEach {
-                list.add(0, Article(it.id!!, it.title!!, it.body!!, it.url!!, User(it.profileImageUrl!!)))
+                list.add(0, Article().apply {
+                    id = it.id
+                    title = it.title
+                    body = it.body
+                    url = it.url
+                    user?.profile_image_url = it.profileImageUrl
+                })
             }
             return list
         }

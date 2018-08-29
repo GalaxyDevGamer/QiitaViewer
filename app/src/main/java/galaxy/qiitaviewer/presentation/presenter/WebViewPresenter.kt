@@ -51,7 +51,7 @@ class WebViewPresenter @Inject constructor(private val  useCase: ArticleUseCase)
             title = article.title
             url = article.url
             body = article.body
-            profileImageUrl = article.user.profile_image_url
+            profileImageUrl = article.user?.profile_image_url
         }
         Realm.getDefaultInstance().executeTransaction { it.insertOrUpdate(favourite) }
     }

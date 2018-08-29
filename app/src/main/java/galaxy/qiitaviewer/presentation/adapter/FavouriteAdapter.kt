@@ -9,7 +9,6 @@ import com.squareup.picasso.Picasso
 import galaxy.qiitaviewer.R
 import galaxy.qiitaviewer.callback.RecyclerListener
 import galaxy.qiitaviewer.domain.entity.Article
-import galaxy.qiitaviewer.domain.entity.User
 import galaxy.qiitaviewer.helper.ArticleManager
 import galaxy.qiitaviewer.realm.Favourite
 import io.realm.Realm
@@ -31,7 +30,13 @@ class FavouriteAdapter(val context: Context?, private val listener: RecyclerList
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
         holder.bindItems(list[position])
-        holder.itemView.setOnClickListener { listener.onClick(Article(item.id, item.title, item.body, item.url, User(item.user.profile_image_url))) }
+        holder.itemView.setOnClickListener { listener.onClick(Article().apply {
+            id = item.id
+            title = item.title
+            body = item.body
+            url = item.url
+            user = item.user
+        }) }
     }
 
     override fun getItemCount() = list.size
@@ -101,7 +106,7 @@ class FavouriteAdapter(val context: Context?, private val listener: RecyclerList
             val title = itemView.article_title
             val thumbnail = itemView.article_thumbnail
             title.text = item.title
-            Picasso.with(context).load(item.user.profile_image_url).into(thumbnail)
+            Picasso.with(context).load(item.user?.profile_image_url).into(thumbnail)
         }
     }
 }

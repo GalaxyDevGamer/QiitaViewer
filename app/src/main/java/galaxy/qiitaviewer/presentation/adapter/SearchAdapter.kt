@@ -26,7 +26,7 @@ class SearchAdapter(val context: Context?, private val listener: RecyclerListene
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = result[position]
-        Picasso.with(context).load(item.user.profile_image_url).into(holder.thumbnail)
+        Picasso.with(context).load(item.user?.profile_image_url).into(holder.thumbnail)
         holder.title.text = item.title
         holder.itemView.setOnClickListener {
             listener.onClick(item)
