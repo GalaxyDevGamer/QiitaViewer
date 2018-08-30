@@ -21,6 +21,8 @@ interface AppComponent {
 
     fun inject(fragment: StockFragment)
 
+    fun inject(fragment: LectureFragment)
+
     fun inject(fragment: SearchFragment)
 
     fun inject(fragment: WebViewFragment)

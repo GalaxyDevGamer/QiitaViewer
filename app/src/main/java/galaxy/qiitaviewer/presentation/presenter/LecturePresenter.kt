@@ -5,37 +5,33 @@ import galaxy.qiitaviewer.ContextData
 import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.domain.usecase.ArticleUseCase
 import galaxy.qiitaviewer.helper.ArticleManager
-import galaxy.qiitaviewer.helper.PreferenceHelper
-import galaxy.qiitaviewer.presentation.fragment.StockFragment
-import galaxy.qiitaviewer.presentation.view.StockView
+import galaxy.qiitaviewer.presentation.fragment.LectureFragment
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
-class StockPresenter @Inject constructor(private val useCase: ArticleUseCase) {
+class LecturePresenter @Inject constructor(private val useCase: ArticleUseCase) {
 
-    var view: StockFragment? = null
+    var view: LectureFragment? = null
     var currentPage = 1
 
     fun initialize() = launch(UI) {
-        if (PreferenceHelper.instance.getUser() != null) {
-            ArticleManager.instance.stock.clear()
-            currentPage = 1
-            getStocks(currentPage)
-        }
+        ArticleManager.instance.lectures.clear()
+        currentPage = 1
+        getArticles(currentPage)
     }
 
     fun loadMore() = launch(UI) {
         currentPage++
-        getStocks(currentPage)
+        getArticles(currentPage)
     }
 
-    private suspend fun getStocks(page: Int) = useCase.getStocks(page).let {
+    private suspend fun getArticles(page: Int) = useCase.getLectures(page).let {
         if (it.isSuccessful) {
-            ArticleManager.instance.stock.addAll(it.body()!!)
+            ArticleManager.instance.lectures.addAll(it.body()!!)
             view?.onComplete()
         } else {
-            view?.showError("Failed to get stocks")
+            view?.showError("Failed to get articles")
             Log.e("Error:", it.message())
         }
     }

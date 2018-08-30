@@ -27,12 +27,12 @@ class ArticlePresenter @Inject constructor(private val useCase: ArticleUseCase) 
     }
 
     private suspend fun getArticles(page: Int) = useCase.getArticles(page).let {
-        try {
-            ArticleManager.instance.article.addAll(it)
+        if (it.isSuccessful) {
+            ArticleManager.instance.article.addAll(it.body()!!)
             view?.onComplete()
-        } catch (e: Throwable) {
-            view?.showError("Connection error")
-            Log.e("Error:", e.message)
+        } else {
+            view?.showError("Failed to get articles")
+            Log.e("Error:", it.message())
         }
     }
 

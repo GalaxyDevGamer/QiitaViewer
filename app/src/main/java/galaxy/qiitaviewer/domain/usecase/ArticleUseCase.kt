@@ -11,15 +11,19 @@ import javax.inject.Inject
 class ArticleUseCase @Inject constructor(private val articleApi: ArticleApi){
 
     suspend fun getArticles(page: Int) = withContext(CommonPool) {
-        articleApi.getArticles(page, 10).await()
+        articleApi.getArticles(page, 10).awaitResponse()
     }
 
     suspend fun getStocks(page: Int) = withContext(CommonPool) {
-        articleApi.getStocks(PreferenceHelper.instance.getUser(), page).await()
+        articleApi.getStocks(PreferenceHelper.instance.getUser(), page).awaitResponse()
+    }
+
+    suspend fun getLectures(page: Int) = withContext(CommonPool) {
+        articleApi.getLectures(page, 10).awaitResponse()
     }
 
     suspend fun searchArticle(query: String, page: Int) = withContext(CommonPool) {
-        articleApi.searchArticles(query, page, 10).await()
+        articleApi.searchArticles(query, page, 10).awaitResponse()
     }
 
     suspend fun isStocked(id: String) = withContext(CommonPool)  {

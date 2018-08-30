@@ -37,12 +37,12 @@ class SearchPresenter @Inject constructor(private val useCase: ArticleUseCase){
         searchArticle(query, currentPage)
     }
 
-    private suspend fun searchArticle(query: String, page: Int) {
-        try {
-            useCase.searchArticle(query, page).let { view?.onComplete(it) }
-        } catch (e: Throwable) {
+    private suspend fun searchArticle(query: String, page: Int) = useCase.searchArticle(query, page).let {
+        if (it.isSuccessful)
+            view?.onComplete(it.body()!!)
+        else {
             view?.showError("Connection error")
-            Log.e("Error:", e.message)
+            Log.e("Error:", it.message())
         }
     }
 

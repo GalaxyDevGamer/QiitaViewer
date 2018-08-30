@@ -3,6 +3,7 @@ package galaxy.qiitaviewer.presentation.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import galaxy.qiitaviewer.presentation.fragment.LectureFragment
 import galaxy.qiitaviewer.presentation.fragment.ArticleFragment
 import galaxy.qiitaviewer.presentation.fragment.FavouriteFragment
 import galaxy.qiitaviewer.presentation.fragment.StockFragment
@@ -19,6 +20,7 @@ class ViewPageAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
             fragments.add(ArticleFragment.newInstance())
             fragments.add(FavouriteFragment.newInstance())
             fragments.add(StockFragment.newInstance())
+            fragments.add(LectureFragment.newInstance())
         }
     }
 
@@ -31,6 +33,6 @@ class ViewPageAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
     fun favouriteFragment() = fragments[1] as FavouriteFragment
 
     companion object {
-        private val FRAGMENT_TITLES = arrayOf("Home", "Favourite", "Stock")
+        private val FRAGMENT_TITLES = arrayOf("Home", "Favourites", "Stocks", "Lectures")
     }
 }

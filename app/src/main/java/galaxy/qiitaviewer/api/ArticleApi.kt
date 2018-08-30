@@ -9,13 +9,16 @@ import retrofit2.http.*
 
 interface ArticleApi {
     @GET("items")
-    fun getArticles(@Query("page") page: Int, @Query("per_page") perPage: Int): Deferred<List<Article>>
+    fun getArticles(@Query("page") page: Int, @Query("per_page") perPage: Int): Call<List<Article>>
 
     @GET("items")
-    fun searchArticles(@Query("query") query: String?, @Query("page") page: Int, @Query("per_page") perPage: Int): Deferred<List<Article>>
+    fun searchArticles(@Query("query") query: String?, @Query("page") page: Int, @Query("per_page") perPage: Int): Call<List<Article>>
 
     @GET("users/{user_id}/stocks")
-    fun getStocks(@Path("user_id") id: String, @Query("page") page: Int): Deferred<List<Article>>
+    fun getStocks(@Path("user_id") id: String, @Query("page") page: Int): Call<List<Article>>
+
+    @GET("users/Galaxy/items")
+    fun getLectures(@Query("page") page: Int, @Query("per_page") perPage: Int): Call<List<Article>>
 
     @GET("items/{item_id}/stock")
     fun isStocked(@Header("Authorization") header: String, @Path("item_id") id: String): Call<StockResponse>
