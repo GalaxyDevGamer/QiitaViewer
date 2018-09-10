@@ -18,6 +18,8 @@ class PreferenceHelper {
 
     fun saveAccessToken(token: String) = ContextData.instance.context?.getSharedPreferences("setting", Context.MODE_PRIVATE)?.edit()?.putString("access_token", token)?.apply()
 
+    fun getProfileImage() = ContextData.instance.context!!.getSharedPreferences("setting", Context.MODE_PRIVATE).getString("profile_image", null)
+
     fun deleteUser() = ContextData.instance.context!!.getSharedPreferences("setting", Context.MODE_PRIVATE).edit().apply {
         remove("access_token")
         remove("description")

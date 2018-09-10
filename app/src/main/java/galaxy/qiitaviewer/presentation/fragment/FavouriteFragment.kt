@@ -13,7 +13,7 @@ import galaxy.qiitaviewer.callback.RecyclerListener
 import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.helper.ArticleManager
 import galaxy.qiitaviewer.realm.Favourite
-import kotlinx.android.synthetic.main.fragment_recyclerview.*
+import kotlinx.android.synthetic.main.recycler_base.*
 
 /**
  * A simple [Fragment] subclass.
@@ -25,7 +25,7 @@ class FavouriteFragment : Fragment(), RecyclerListener {
     private lateinit var favouriteAdapter: FavouriteAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_recyclerview, container, false)
+        return inflater.inflate(R.layout.recycler_base, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

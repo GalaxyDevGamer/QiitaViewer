@@ -5,10 +5,13 @@ apply plugin: "realm-android"
 apply plugin: "kotlin-kapt"
 apply plugin: "deploygate"
 
+def PACKAGE_NAME = "galaxy.qiitaviewer"
+def APPNAME = "QiitaViewer"
+
 android {
     compileSdkVersion android_version
     defaultConfig {
-        applicationId "galaxy.qiitaviewer"
+        applicationId PACKAGE_NAME
         minSdkVersion 21
         targetSdkVersion android_version
         versionCode 1
@@ -21,21 +24,34 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions("default")
+    productFlavors {
+        develop {
+            dimension = "default"
+            applicationId = "${PACKAGE_NAME}.develop"
+            manifestPlaceholders = [applicationName: "${APPNAME}"]
+        }
+
+        product {
+            dimension = "default"
+            applicationId = PACKAGE_NAME
+            manifestPlaceholders = [applicationName: "${APPNAME}"]
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$support_library"
-    implementation "com.android.support.constraint:constraint-layout:$android_constraint_version"
     implementation "com.android.support:recyclerview-v7:$support_library"
     implementation "com.android.support:support-v4:$support_library"
     implementation "com.android.support:design:$support_library"
     implementation "com.android.support:recyclerview-v7:$support_library"
-    implementation "com.squareup.retrofit2:retrofit:$android_retrofit2_version"
-    implementation "com.squareup.retrofit2:converter-gson:$android_retrofit2_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.squareup.picasso:picasso:$android_picasso_version"
-    implementation "org.greenrobot:eventbus:$android_eventbus_version"
+    implementation "com.squareup.picasso:picasso:$picasso_version"
+    implementation "org.greenrobot:eventbus:$eventbus_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

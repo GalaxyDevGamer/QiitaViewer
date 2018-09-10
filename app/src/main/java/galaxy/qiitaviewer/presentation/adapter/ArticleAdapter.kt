@@ -97,8 +97,10 @@ class ArticleAdapter(val context: Context?, private val listener: RecyclerListen
 
         fun bindItems(item: Article) {
             val thumbnail = itemView.article_thumbnail
+            val user = itemView.user
             val title = itemView.article_title
             title.text = item.title
+            user.hint = item.user?.id
             Picasso.with(context).load(item.user?.profile_image_url).into(thumbnail)
         }
     }

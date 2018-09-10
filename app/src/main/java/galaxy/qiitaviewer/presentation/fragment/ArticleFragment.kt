@@ -16,7 +16,7 @@ import galaxy.qiitaviewer.helper.ArticleManager
 import galaxy.qiitaviewer.presentation.adapter.ArticleAdapter
 import galaxy.qiitaviewer.presentation.presenter.ArticlePresenter
 import galaxy.qiitaviewer.presentation.view.ArticleView
-import kotlinx.android.synthetic.main.fragment_recyclerview.*
+import kotlinx.android.synthetic.main.recycler_base.*
 import javax.inject.Inject
 
 
@@ -43,7 +43,7 @@ class ArticleFragment : Fragment(), RecyclerListener, ArticleView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recyclerview, container, false)
+        return inflater.inflate(R.layout.recycler_base, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

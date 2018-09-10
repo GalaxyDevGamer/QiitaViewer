@@ -2,12 +2,11 @@ package galaxy.qiitaviewer.presentation.fragment
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.squareup.picasso.Picasso
 import galaxy.qiitaviewer.R
 import galaxy.qiitaviewer.application.App
+import galaxy.qiitaviewer.domain.entity.UserInfo
 import galaxy.qiitaviewer.helper.PreferenceHelper
 import galaxy.qiitaviewer.presentation.presenter.UserInfoPresenter
 import kotlinx.android.synthetic.main.fragment_user_info.*
@@ -30,6 +29,7 @@ class UserInfoFragment : android.support.v4.app.Fragment() {
         super.onCreate(savedInstanceState)
         (activity?.application as App).appComponent.inject(this)
         presenter.view = this
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -40,33 +40,30 @@ class UserInfoFragment : android.support.v4.app.Fragment() {
 
     override fun onResume() {
         super.onResume()
-        checkUser()
+        if (PreferenceHelper.instance.getUser() == null) showNothing() else launch(UI) { presenter.getUserInfo() }
     }
-
-    fun checkUser() = if (PreferenceHelper.instance.getUser() == null) showNothing() else showUserInfo()
 
     fun showNothing() {
         user_info_screen.visibility = View.GONE
         nothing.visibility = View.VISIBLE
-        login.setOnClickListener { presenter.login() }
+        login.setOnClickListener { presenter.login(getString(R.string.authorize_uri)) }
     }
 
-    fun showUserInfo() {
+    fun showUserInfo(userInfo: UserInfo) {
         user_info_screen.visibility = View.VISIBLE
         nothing.visibility = View.GONE
-        updateInfo()
-        update.setOnClickListener { presenter.update() }
+        Picasso.with(context).load(userInfo.profile_image).into(profile_image)
+        user_id.text = userInfo.id
+        description.text = userInfo.description
         logout.setOnClickListener { launch(UI) { presenter.deleteToken() } }
     }
 
-    fun updateInfo() {
-        val preference = PreferenceHelper.instance.getPreference()
-        Picasso.with(context).load(preference.getString("profile_image", null)).into(profile_image)
-        user_id.text = preference.getString("id", null)
-        description.text = preference.getString("description", null)
-    }
-
     fun showMessage(message: String) = Snackbar.make(view!!, message, Snackbar.LENGTH_LONG).show()
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.empty, menu)
+    }
 
     companion object {
         /**

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/home"
+        android:title="@string/home"
+        android:icon="@mipmap/baseline_view_list_black_24"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/stocks"
+        android:title="@string/stock"
+        android:icon="@mipmap/baseline_folder_black_24"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/lectures"
+        android:title="@string/lecture"
+        android:icon="@mipmap/baseline_book_black_24"
+        app:showAsAction="always" />
+</menu>

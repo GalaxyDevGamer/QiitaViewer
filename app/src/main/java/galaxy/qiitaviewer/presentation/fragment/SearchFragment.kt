@@ -4,20 +4,16 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import galaxy.qiitaviewer.R
 import galaxy.qiitaviewer.application.App
 import galaxy.qiitaviewer.presentation.adapter.SearchAdapter
-import galaxy.qiitaviewer.callback.QiitaClient
 import galaxy.qiitaviewer.callback.RecyclerListener
 import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.presentation.presenter.SearchPresenter
-import kotlinx.android.synthetic.main.fragment_recyclerview.*
-import java.io.UnsupportedEncodingException
-import java.net.URLEncoder
+import kotlinx.android.synthetic.main.recycler_base.*
 import javax.inject.Inject
 
 /**
@@ -37,10 +33,11 @@ class SearchFragment : android.support.v4.app.Fragment(), RecyclerListener {
         super.onCreate(savedInstanceState)
         (activity?.application as App).appComponent.inject(this)
         presenter.view = this
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_recyclerview, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,6 +68,7 @@ class SearchFragment : android.support.v4.app.Fragment(), RecyclerListener {
                     previousTotal = totalItemCount
                     if (!loading && (visibleItemCount + firstVisibleItem) > (totalItemCount - 5)) {
                         loading = true
+                        Log.e("search", "loadmore")
                         presenter.loadMore()
                     }
                 }
@@ -87,6 +85,29 @@ class SearchFragment : android.support.v4.app.Fragment(), RecyclerListener {
     fun showError(text: String) = Snackbar.make(view!!, text, Snackbar.LENGTH_LONG).show()
 
     fun onComplete(results: List<Article>) = searchAdapter.update(results)
+
+    fun appendArticles(results: List<Article>) = searchAdapter.appendArticles(results)
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        Log.e("searchFragment", "oncreate menu")
+        inflater?.inflate(R.menu.search_menu, menu)
+        (menu!!.findItem(R.id.searchBar).actionView as SearchView).apply {
+            setIconifiedByDefault(false)
+            queryHint = getString(R.string.search)
+            clearFocus()
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    searchArticles(query)
+                    return false
+                }
+            })
+        }
+    }
 
     companion object {
 

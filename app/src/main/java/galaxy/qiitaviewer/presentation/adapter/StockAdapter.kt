@@ -31,6 +31,7 @@ class StockAdapter(val context: Context, private val listener: RecyclerListener)
         val item = list[position]
         Picasso.with(context).load(item.user?.profile_image_url).into(holder.thumbnail)
         holder.title.text = item.title
+        holder.user.text = item.user?.id
         holder.itemView.setOnClickListener {
             listener.onClick(item)
         }
@@ -41,5 +42,6 @@ class StockAdapter(val context: Context, private val listener: RecyclerListener)
     inner class ViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
         val thumbnail: ImageView = mView.article_thumbnail
         val title: TextView = mView.article_title
+        val user: TextView = mView.user
     }
 }

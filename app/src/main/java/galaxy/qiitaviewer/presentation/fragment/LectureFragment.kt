@@ -14,7 +14,7 @@ import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.helper.ArticleManager
 import galaxy.qiitaviewer.presentation.adapter.LectureAdapter
 import galaxy.qiitaviewer.presentation.presenter.LecturePresenter
-import kotlinx.android.synthetic.main.fragment_recyclerview.*
+import kotlinx.android.synthetic.main.recycler_base.*
 import javax.inject.Inject
 
 /**
@@ -40,7 +40,7 @@ class LectureFragment : android.support.v4.app.Fragment(), RecyclerListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_recyclerview, container, false)
+        return inflater.inflate(R.layout.recycler_base, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

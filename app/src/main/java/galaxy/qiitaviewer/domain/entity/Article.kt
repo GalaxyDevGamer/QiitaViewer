@@ -14,5 +14,6 @@ class Article : Serializable {
 
     inner class User : Serializable{
         var profile_image_url: String? = null
+        var id: String? = null
     }
 }

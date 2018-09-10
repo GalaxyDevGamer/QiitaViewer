@@ -27,12 +27,10 @@ allprojects {
     ext{
         android_version = 28
 
-        support_library = "28.0.0-rc01"
-        android_appcompat_version = "28.0.0-rc01"
-        android_constraint_version = "1.1.2"
-        android_retrofit2_version = "2.3.0"
-        android_picasso_version = "2.5.2"
-        android_eventbus_version = "3.0.0"
+        support_library = "28.0.0-rc02"
+        retrofit2_version = "2.3.0"
+        picasso_version = "2.5.2"
+        eventbus_version = "3.0.0"
         coroutines = "0.24.0"
     }
 }

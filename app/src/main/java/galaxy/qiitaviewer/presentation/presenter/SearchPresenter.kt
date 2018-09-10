@@ -34,7 +34,7 @@ class SearchPresenter @Inject constructor(private val useCase: ArticleUseCase){
 
     fun loadMore() = launch(UI) {
         currentPage++
-        searchArticle(query, currentPage)
+        loadMoreArticles(query, currentPage)
     }
 
     private suspend fun searchArticle(query: String, page: Int) = useCase.searchArticle(query, page).let {
@@ -42,7 +42,16 @@ class SearchPresenter @Inject constructor(private val useCase: ArticleUseCase){
             view?.onComplete(it.body()!!)
         else {
             view?.showError("Connection error")
-            Log.e("Error:", it.message())
+            Log.e("Search Error", it.message())
+        }
+    }
+
+    private suspend fun loadMoreArticles(query: String, page: Int) = useCase.searchArticle(query, page).let {
+        if (it.isSuccessful)
+            view?.appendArticles(it.body()!!)
+        else {
+            view?.showError("Load Failed: Connection Error")
+            Log.e("Append Error", it.message())
         }
     }
 
