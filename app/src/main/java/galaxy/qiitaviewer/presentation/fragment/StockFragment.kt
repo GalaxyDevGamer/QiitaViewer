@@ -9,10 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import galaxy.qiitaviewer.R
 import galaxy.qiitaviewer.application.App
-import galaxy.qiitaviewer.presentation.adapter.StockAdapter
 import galaxy.qiitaviewer.callback.RecyclerListener
 import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.helper.ArticleManager
+import galaxy.qiitaviewer.presentation.adapter.StockAdapter
 import galaxy.qiitaviewer.presentation.presenter.StockPresenter
 import galaxy.qiitaviewer.presentation.view.StockView
 import kotlinx.android.synthetic.main.recycler_base.*
@@ -32,16 +32,25 @@ class StockFragment : android.support.v4.app.Fragment(), RecyclerListener, Stock
     var loading = false
     private var isSwipeRefresh = false
 
+    /**
+     * Injection and setting View interface
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity?.application as App).appComponent.inject(this)
         presenter.view = this
     }
 
+    /**
+     * Inflate layout
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.recycler_base, container, false)
     }
 
+    /**
+     * Initialize RecyclerView and load Stocks
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         stockAdapter = StockAdapter(context!!, this)
@@ -85,6 +94,9 @@ class StockFragment : android.support.v4.app.Fragment(), RecyclerListener, Stock
             presenter.initialize()
     }
 
+    /**
+     * Called when loading finished
+     */
     override fun onComplete() {
         stockAdapter.notifyDataSetChanged()
         loading = false
@@ -95,12 +107,28 @@ class StockFragment : android.support.v4.app.Fragment(), RecyclerListener, Stock
         }
     }
 
+    /**
+     * Called when article clicked
+     */
     override fun onClick(article: Article) {
         presenter.openBrowser(article)
     }
 
-    fun showError(text: String) = Snackbar.make(view!!, text, Snackbar.LENGTH_LONG).show()
+    /**
+     * Called to show error message
+     */
+    override fun showError(message: String) = Snackbar.make(view!!, message, Snackbar.LENGTH_LONG).show()
 
+    /**
+     * Switch visibility of ProgressBar
+     */
+    override fun showLoading(state: Boolean) {
+        progressBar.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    /**
+     * Initialize this Fragment
+     */
     companion object {
 
         @JvmStatic

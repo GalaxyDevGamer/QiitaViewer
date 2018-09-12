@@ -34,18 +34,26 @@ class ArticleFragment : Fragment(), RecyclerListener, ArticleView {
     var loading = false
     private var isSwipeRefresh = false
 
+    /**
+     * Injection and setting View interface
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity?.application as App).appComponent.inject(this)
         presenter.view = this
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    /**
+     * Inflate layout
+     */
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.recycler_base, container, false)
     }
 
+    /**
+     * Initialize RecyclerView and load articles.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val layoutManager = LinearLayoutManager(context)
@@ -90,6 +98,9 @@ class ArticleFragment : Fragment(), RecyclerListener, ArticleView {
             presenter.initialize()
     }
 
+    /**
+     * Called when article load finished
+     */
     override fun onComplete() {
         homeAdapter.notifyDataSetChanged()
         loading = false
@@ -100,12 +111,28 @@ class ArticleFragment : Fragment(), RecyclerListener, ArticleView {
         }
     }
 
+    /**
+     * Called when clicked article
+     */
     override fun onClick(article: Article) {
         presenter.openBrowser(article)
     }
 
-    fun showError(text: String) = Snackbar.make(view!!, text, Snackbar.LENGTH_LONG).show()
+    /**
+     * Called to show error message
+     */
+    override fun showError(message: String) = Snackbar.make(view!!, message, Snackbar.LENGTH_LONG).show()
 
+    /**
+     * Switch visibility of ProgressBar
+     */
+    override fun showLoading(state: Boolean) {
+        progressBar.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    /**
+     * For initializing this Fragment
+     */
     companion object {
 
         @JvmStatic

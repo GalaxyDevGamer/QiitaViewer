@@ -21,7 +21,7 @@ import javax.inject.Inject
  * Activities containing this fragment MUST implement the
  * [RecyclerListener] interface.
  */
-class SearchFragment : android.support.v4.app.Fragment(), RecyclerListener {
+class SearchFragment : android.support.v4.app.Fragment(), RecyclerListener, galaxy.qiitaviewer.presentation.view.SearchView {
 
     @Inject
     lateinit var presenter: SearchPresenter
@@ -82,11 +82,11 @@ class SearchFragment : android.support.v4.app.Fragment(), RecyclerListener {
 
     fun searchArticles(query: String) = presenter.search(query)
 
-    fun showError(text: String) = Snackbar.make(view!!, text, Snackbar.LENGTH_LONG).show()
+    override fun showError(message: String) = Snackbar.make(view!!, message, Snackbar.LENGTH_LONG).show()
 
-    fun onComplete(results: List<Article>) = searchAdapter.update(results)
+    override fun onComplete(results: List<Article>) = searchAdapter.update(results)
 
-    fun appendArticles(results: List<Article>) = searchAdapter.appendArticles(results)
+    override fun appendArticles(results: List<Article>) = searchAdapter.appendArticles(results)
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)

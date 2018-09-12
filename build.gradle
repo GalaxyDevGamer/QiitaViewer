@@ -28,6 +28,8 @@ allprojects {
         android_version = 28
 
         support_library = "28.0.0-rc02"
+        rxjava2_version = '2.1.8'
+        rxandroid_version = '2.0.1'
         retrofit2_version = "2.3.0"
         picasso_version = "2.5.2"
         eventbus_version = "3.0.0"

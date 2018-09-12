@@ -5,6 +5,7 @@ import galaxy.qiitaviewer.ContextData
 import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.domain.usecase.ArticleUseCase
 import galaxy.qiitaviewer.presentation.fragment.SearchFragment
+import galaxy.qiitaviewer.presentation.view.SearchView
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import java.io.UnsupportedEncodingException
@@ -15,7 +16,7 @@ class SearchPresenter @Inject constructor(private val useCase: ArticleUseCase){
 
     var query = ""
     var currentPage = 1
-    var view: SearchFragment? = null
+    var view: SearchView? = null
 
     fun search(query: String) {
         try {

@@ -11,7 +11,7 @@ class FragmentMakeHelper {
             FragmentType.STOCKS -> StockFragment.newInstance()
             FragmentType.LECTURES -> LectureFragment.newInstance()
             FragmentType.SEARCH -> SearchFragment.newInstance()
-            FragmentType.BROWSER -> WebViewFragment.newInstance(any)
+            FragmentType.BROWSER -> BrowserFragment.newInstance(any)
             FragmentType.USERINFO -> UserInfoFragment.newInstance()
         }
     }

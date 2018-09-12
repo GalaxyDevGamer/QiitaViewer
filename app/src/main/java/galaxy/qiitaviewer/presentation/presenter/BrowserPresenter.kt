@@ -2,25 +2,22 @@ package galaxy.qiitaviewer.presentation.presenter
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import galaxy.qiitaviewer.R
 import galaxy.qiitaviewer.domain.entity.Article
-import galaxy.qiitaviewer.domain.entity.StockResponse
 import galaxy.qiitaviewer.domain.usecase.ArticleUseCase
 import galaxy.qiitaviewer.helper.ArticleManager
-import galaxy.qiitaviewer.presentation.fragment.WebViewFragment
+import galaxy.qiitaviewer.helper.PreferenceHelper
+import galaxy.qiitaviewer.presentation.fragment.BrowserFragment
+import galaxy.qiitaviewer.presentation.view.BrowserView
 import galaxy.qiitaviewer.realm.Favourite
 import io.realm.Realm
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
-class WebViewPresenter @Inject constructor(private val  useCase: ArticleUseCase) {
+class BrowserPresenter @Inject constructor(private val  useCase: ArticleUseCase) {
 
-    var view: WebViewFragment? = null
+    var view: BrowserView? = null
     var id: String? = null
     var isStocked = false
     var isLiked = false
@@ -36,7 +33,7 @@ class WebViewPresenter @Inject constructor(private val  useCase: ArticleUseCase)
             if (it.isSuccessful)
                 isLiked = true
         }
-        view?.activity?.invalidateOptionsMenu()
+        view?.updateMenu()
     }
 
     fun getDrawable(context: Context) = if (isFavourite()) ContextCompat.getDrawable(context, R.mipmap.ic_star_black_24dp)!! else ContextCompat.getDrawable(context, R.mipmap.ic_star_border_black_24dp)!!
@@ -68,22 +65,30 @@ class WebViewPresenter @Inject constructor(private val  useCase: ArticleUseCase)
     }
 
     fun like() = launch(UI) {
+        if (!PreferenceHelper.instance.isAuthorized()) {
+            view?.showNeedToLogin()
+            return@launch
+        }
         val response = if (isLiked) useCase.unlikeThisArticle(id!!) else useCase.likeThisArticle(id!!)
         if (response.isSuccessful) {
             isLiked = !isLiked
             view?.showMessage(if (isLiked) "Liked" else "unLiked")
-            view?.activity?.invalidateOptionsMenu()
+            view?.updateMenu()
         } else
             view?.showMessage("Operation failed")
     }
 
     fun stock() = launch(UI) {
+        if (!PreferenceHelper.instance.isAuthorized()) {
+            view?.showNeedToLogin()
+            return@launch
+        }
         val response = if (isStocked) useCase.unStockArticle(id!!) else useCase.stockArticle(id!!)
         if (response.isSuccessful) {
             if (response.code() == 204) {
                 isStocked = !isStocked
                 view?.showMessage(if (isStocked) "Stocked" else "unStocked")
-                view?.activity?.invalidateOptionsMenu()
+                view?.updateMenu()
             }
         } else
             view?.showMessage("Operation failed")

@@ -1,6 +1,6 @@
 package galaxy.qiitaviewer.presentation.view
 
-interface StockView {
+interface LectureView {
     fun onComplete()
 
     fun showError(message: String)

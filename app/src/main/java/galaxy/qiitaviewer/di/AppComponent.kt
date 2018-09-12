@@ -25,7 +25,7 @@ interface AppComponent {
 
     fun inject(fragment: SearchFragment)
 
-    fun inject(fragment: WebViewFragment)
+    fun inject(fragment: BrowserFragment)
 
     fun inject(fragment: UserInfoFragment)
 }

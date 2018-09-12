@@ -69,6 +69,10 @@ dependencies {
 
     implementation 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.12.0'
     compileOnly 'javax.annotation:jsr250-api:1.0'
+
+    // rx
+    compile "io.reactivex.rxjava2:rxjava:$rxjava2_version"
+    compile "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 }
 repositories {
     mavenCentral()

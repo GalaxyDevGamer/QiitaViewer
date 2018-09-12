@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.util.Log
 import android.view.*
 import android.webkit.WebChromeClient
 import android.webkit.WebViewClient
@@ -13,21 +12,21 @@ import galaxy.qiitaviewer.ArticleData
 import galaxy.qiitaviewer.R
 import galaxy.qiitaviewer.application.App
 import galaxy.qiitaviewer.domain.entity.Article
-import galaxy.qiitaviewer.helper.PreferenceHelper
-import galaxy.qiitaviewer.presentation.presenter.WebViewPresenter
+import galaxy.qiitaviewer.presentation.presenter.BrowserPresenter
+import galaxy.qiitaviewer.presentation.view.BrowserView
 import kotlinx.android.synthetic.main.fragment_web_view.*
 import java.io.Serializable
 import javax.inject.Inject
 
 /**
- * A simple [Fragment] subclass.
- * Use the [WebViewFragment.newInstance] factory method to
+ * A simple [BrowserFragment] subclass.
+ * Use the [BrowserFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class WebViewFragment : android.support.v4.app.Fragment() {
+class BrowserFragment : android.support.v4.app.Fragment(), BrowserView {
 
     @Inject
-    internal lateinit var presenter: WebViewPresenter
+    internal lateinit var presenter: BrowserPresenter
 
     lateinit var article: Article
 
@@ -77,19 +76,23 @@ class WebViewFragment : android.support.v4.app.Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.stock -> if (PreferenceHelper.instance.isAuthorized()) presenter.stock() else showSnackbar()
-            R.id.like -> if (PreferenceHelper.instance.isAuthorized()) presenter.like() else showSnackbar()
+            R.id.stock -> presenter.stock()
+            R.id.like -> presenter.like()
             R.id.favourite -> presenter.changeFavourite(article)
         }
         activity!!.invalidateOptionsMenu()
         return super.onOptionsItemSelected(item)
     }
 
-    fun showSnackbar() = Snackbar.make(view!!, "You need to login to Qiita to do this", Snackbar.LENGTH_LONG).setAction(R.string.login) {
+    override fun showNeedToLogin() = Snackbar.make(view!!, "You need to login to Qiita to do this", Snackbar.LENGTH_LONG).setAction(R.string.login) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.authorize_uri))))
     }.show()
 
-    fun showMessage(message: String) = Snackbar.make(view!!, message, Snackbar.LENGTH_LONG).show()
+    override fun showMessage(message: String) = Snackbar.make(view!!, message, Snackbar.LENGTH_LONG).show()
+
+    override fun updateMenu() {
+        activity?.invalidateOptionsMenu()
+    }
 
     companion object {
         /**
@@ -102,7 +105,7 @@ class WebViewFragment : android.support.v4.app.Fragment() {
         private const val ARG = "index"
 
         @JvmStatic
-        fun newInstance(arg: Any) = WebViewFragment().apply {
+        fun newInstance(arg: Any) = BrowserFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(ARG, arg as Serializable)
             }

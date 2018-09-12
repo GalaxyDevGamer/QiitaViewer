@@ -14,6 +14,7 @@ import galaxy.qiitaviewer.domain.entity.Article
 import galaxy.qiitaviewer.helper.ArticleManager
 import galaxy.qiitaviewer.presentation.adapter.LectureAdapter
 import galaxy.qiitaviewer.presentation.presenter.LecturePresenter
+import galaxy.qiitaviewer.presentation.view.LectureView
 import kotlinx.android.synthetic.main.recycler_base.*
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ import javax.inject.Inject
  * Activities containing this fragment MUST implement the
  * [RecyclerListener] interface.
  */
-class LectureFragment : android.support.v4.app.Fragment(), RecyclerListener {
+class LectureFragment : android.support.v4.app.Fragment(), RecyclerListener, LectureView {
 
     @Inject
     internal lateinit var presenter: LecturePresenter
@@ -38,8 +39,7 @@ class LectureFragment : android.support.v4.app.Fragment(), RecyclerListener {
         lectureAdapter = LectureAdapter(context!!, this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.recycler_base, container, false)
     }
 
@@ -89,7 +89,7 @@ class LectureFragment : android.support.v4.app.Fragment(), RecyclerListener {
         presenter.openBrowser(article)
     }
 
-    fun onComplete() {
+    override fun onComplete() {
         lectureAdapter.notifyDataSetChanged()
         loading = false
         if (isSwipeRefresh) {
@@ -99,7 +99,14 @@ class LectureFragment : android.support.v4.app.Fragment(), RecyclerListener {
         }
     }
 
-    fun showError(text: String) = Snackbar.make(view!!, text, Snackbar.LENGTH_LONG).show()
+    override fun showError(message: String) = Snackbar.make(view!!, message, Snackbar.LENGTH_LONG).show()
+
+    /**
+     * Switch visibility of ProgressBar
+     */
+    override fun showLoading(state: Boolean) {
+        progressBar.visibility = if (state) View.VISIBLE else View.GONE
+    }
 
     companion object {
 
